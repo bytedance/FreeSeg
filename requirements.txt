@@ -1,0 +1,11 @@
+cython
+scipy
+shapely
+timm
+h5py
+wandb
+fire
+mmcv
+detectron2
+git+https://github.com/cocodataset/panopticapi.git
+git+https://github.com/mcordts/cityscapesScripts.git

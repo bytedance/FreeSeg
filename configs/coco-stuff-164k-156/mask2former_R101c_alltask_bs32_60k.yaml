@@ -1,0 +1,50 @@
+_BASE_: ../coco-stuff-164k-171/mask2former_R50_bs32_60k.yaml
+MODEL:
+  META_ARCHITECTURE: "OpenVocabulary"
+  MASK_FORMER:
+    TEST:
+      INSTANCE_ON: True
+      PANOPTIC_ON: True
+      OVERLAP_THRESHOLD: 0.5
+      OBJECT_MASK_THRESHOLD: 0.5
+  BACKBONE:
+    NAME: "build_resnet_deeplab_backbone"
+  WEIGHTS: "detectron2://DeepLab/R-103.pkl"
+  SEM_SEG_HEAD:
+    NAME: "MaskFormerInteractionHead"
+    NUM_CLASSES: 156 #only used in set criterion  
+    EMBEDDING_DIM: 512
+    EMBED_LAYERS: 2
+  RESNETS:
+    DEPTH: 101
+    STEM_TYPE: "deeplab"
+    STEM_OUT_CHANNELS: 128
+    STRIDE_IN_1X1: False
+    OUT_FEATURES: ["res2", "res3", "res4", "res5"]
+    # NORM: "SyncBN"
+    RES5_MULTI_GRID: [1, 2, 4]
+  CLIP_ADAPTER:
+    PROMPT_LEARNER: "learnable"
+    PROMPT_DIM: 512
+    PROMPT_SHAPE: (16, 0)
+    CLIP_MODEL_NAME: "ViT-B/16"
+    MASK_FILL: "mean"
+    MASK_EXPAND_RATIO: 1.0
+    MASK_THR: 0.5
+    MASK_MATTING: False
+    REGION_RESIZED: True
+    SEPERATE_ADAPTER: False
+    CLIP_ENSEMBLE: True
+    CLIP_ENSEMBLE_WEIGHT: 0.8
+INPUT:
+  IMAGE_SIZE: 640  
+  DATASET_MAPPER_NAME: "coco_full_lsj" 
+  TASK_NAME: ["semantic segmentation.", "instance segmentation.",  "panoptic segmentation."]
+DATASETS:
+  TRAIN: ("coco_2017_train_full_task_base",) 
+  TEST: ("coco_2017_val_panoptic_with_sem_seg",) 
+SOLVER:
+  IMS_PER_BATCH: 32
+  BASE_LR: 0.00015
+  WEIGHT_DECAY: 0.00015
+  MAX_ITER: 60000

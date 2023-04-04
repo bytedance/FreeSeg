@@ -1,0 +1,34 @@
+_BASE_: mask2former_R50_bs16_20k.yaml
+MODEL:
+  MASK_FORMER:
+    TEST:
+      INSTANCE_ON: False
+      PANOPTIC_ON: False
+  BACKBONE:
+    NAME: "build_resnet_deeplab_backbone"
+  WEIGHTS: "detectron2://DeepLab/R-103.pkl"
+  SEM_SEG_HEAD:
+    NAME: "MaskFormerInteractionHead"
+    EMBEDDING_DIM: 512
+  RESNETS:
+    DEPTH: 101
+    STEM_TYPE: "deeplab"
+    STEM_OUT_CHANNELS: 128
+    STRIDE_IN_1X1: False
+    OUT_FEATURES: ["res2", "res3", "res4", "res5"]
+    RES5_MULTI_GRID: [1, 2, 4]
+  CLIP_ADAPTER:
+    CLIP_MODEL_NAME: "ViT-B/16" 
+    CLIP_ENSEMBLE_WEIGHT: 0.8
+INPUT:
+  DATASET_MAPPER_NAME: "mask_former_semantic" 
+  TASK_NAME: ["semantic segmentation."] 
+SOLVER:
+  IMS_PER_BATCH: 32
+  BASE_LR: 0.00002
+  MAX_ITER: 20000
+  WARMUP_FACTOR: 1.0
+  WARMUP_ITERS: 0
+  WEIGHT_DECAY: 0.00002
+TEST:
+  EVAL_PERIOD: 2000
