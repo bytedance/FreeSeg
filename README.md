@@ -102,7 +102,30 @@ Training model
 python train_net.py --config-file configs/coco-stuff-164k-156/mask2former_R101c_alltask_bs32_60k.yaml --num-gpus 8 MODEL.CLIP_ADAPTER.PROMPT_CHECKPOINT ${TRAINED_PROMPT_MODEL}
 ```
 
+
 ### Evaluation
 ```bash
 python train_net.py --config-file configs/coco-stuff-164k-156/mask2former_R101c_alltask_bs32_60k.yaml --num-gpus 8 --eval-only MODEL.WEIGHTS  ${TRAINED_MODEL}
 ```
+
+
+### Testing for Demo
+The model weight for demo can get from [model](https://drive.google.com/file/d/1X0oWfcpZo5bDkyFw7xiGBk_Yqx5gxhj_/view?usp=drive_link).
+
+
+## Citation
+
+If you find this work useful in your method, you can cite the paper as below:
+
+```bash
+@inproceedings{qin2023freeseg,
+  title={FreeSeg: Unified, Universal and Open-Vocabulary Image Segmentation},
+  author={Qin, Jie and Wu, Jie and Yan, Pengxiang and Li, Ming and Yuxi, Ren and Xiao, Xuefeng and Wang, Yitong and Wang, Rui and Wen, Shilei and Pan, Xin and others},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={19446--19455},
+  year={2023}
+}
+```
+
+
+
