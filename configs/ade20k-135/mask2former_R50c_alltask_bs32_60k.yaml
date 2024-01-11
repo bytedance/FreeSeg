@@ -1,0 +1,37 @@
+_BASE_: ../ade20k-150/mask2former_R50_bs32_60k.yaml
+MODEL:
+  META_ARCHITECTURE: "OpenVocabulary"
+  MASK_FORMER:
+    TEST:
+      INSTANCE_ON: True
+      PANOPTIC_ON: True
+      OVERLAP_THRESHOLD: 0.5
+      OBJECT_MASK_THRESHOLD: 0.5
+  SEM_SEG_HEAD:
+    NAME: "MaskFormerInteractionHead"
+    IN_FEATURES: ["res2", "res3", "res4", "res5"]
+    IGNORE_VALUE: 255
+    NUM_CLASSES: 135
+    EMBEDDING_DIM: 512
+    EMBED_LAYERS: 2
+  CLIP_ADAPTER:
+    PROMPT_LEARNER: "learnable"
+    # for learnable prompt
+    PROMPT_DIM: 512
+    PROMPT_SHAPE: (16, 0)
+    CLIP_MODEL_NAME: "ViT-B/16"
+    MASK_FILL: "mean"
+    MASK_EXPAND_RATIO: 1.0
+    MASK_THR: 0.5
+    MASK_MATTING: False
+    REGION_RESIZED: True
+    CLIP_ENSEMBLE: True
+    CLIP_ENSEMBLE_WEIGHT: 0.8
+INPUT:
+  IMAGE_SIZE: 512  
+  DATASET_MAPPER_NAME: "ade20k_full_lsj" 
+  TASK_NAME: ["semantic segmentation.", "instance segmentation.",  "panoptic segmentation."]
+DATASETS:
+  TRAIN: ("ade20k_all_train_base",) 
+  TEST: ("ade20k_all_val",) 
+
